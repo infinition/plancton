@@ -91,25 +91,115 @@
         </div>
       </div>
 
-      <!-- Effects Section (Reflet, Gloss, Bordure) -->
-      <div class="control-group">
-        <label class="control-label" data-i18n="fxTitle">Effets & Finitions</label>
-        <div class="fx-options">
-          <label class="fx-toggle">
-            <input type="checkbox" id="chkGloss">
-            <span data-i18n="fxGloss">Reflet / Gloss Apple</span>
-          </label>
-
-          <label class="fx-toggle">
-            <input type="checkbox" id="chkBorder">
-            <span data-i18n="fxBorder">Bordure métallique</span>
-          </label>
-          <div id="borderOptions" style="display: none; align-items: center; gap: 8px; margin-top: 4px;">
-            <input type="color" id="borderColorPicker" value="#ccff00" style="width: 32px; height: 30px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
-            <input type="range" id="borderWidthRange" min="2" max="30" value="8" style="flex: 1;">
+      <!-- Accordion: Background Removal (Chroma Keying) -->
+      <details class="accordion-item">
+        <summary class="accordion-header">
+          <span data-i18n="removeBgTitle">🧪 Supprimer la couleur de fond</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-content">
+          <div class="fx-options">
+            <label class="fx-toggle">
+              <input type="checkbox" id="chkRemoveBg">
+              <span data-i18n="chkRemoveBg">Activer le détourage par couleur</span>
+            </label>
+            <div id="removeBgOptions" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 11px; color: var(--text-muted);" data-i18n="keyColor">Couleur à retirer</span>
+                <input type="color" id="keyColorPicker" value="#ffffff" style="width: 36px; height: 28px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+              </div>
+              <div class="control-label">
+                <span data-i18n="tolerance">Tolérance</span>
+                <span id="toleranceValue" class="control-label-value">15%</span>
+              </div>
+              <input type="range" id="toleranceRange" min="1" max="60" value="15">
+            </div>
           </div>
         </div>
-      </div>
+      </details>
+
+      <!-- Accordion: Badge / Ruban Overlay -->
+      <details class="accordion-item">
+        <summary class="accordion-header">
+          <span data-i18n="badgeTitle">🏷️ Badge & Ruban de Build</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-content">
+          <div class="fx-options">
+            <label class="fx-toggle">
+              <input type="checkbox" id="chkBadge">
+              <span data-i18n="chkBadge">Afficher un badge de version</span>
+            </label>
+            <div id="badgeOptions" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px;">
+              <div style="display: flex; gap: 6px;">
+                <input type="text" id="badgeTextInput" value="BETA" placeholder="TEXTE (ex: BETA, DEV)" style="flex: 1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 6px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase;">
+                <input type="color" id="badgeColorPicker" value="#ef4444" style="width: 34px; height: 30px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+              </div>
+              <select id="badgeStyleSelect" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 6px; font-size: 11px; outline: none;">
+                <option value="ribbon">Ruban coin Haut-Droit</option>
+                <option value="pill">Badge Pilule Bas-Droit</option>
+                <option value="banner">Bandeau Bas Plein</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Accordion: Effects & Styling -->
+      <details class="accordion-item" open>
+        <summary class="accordion-header">
+          <span data-i18n="fxTitle">✨ Effets & Finitions</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-content">
+          <div class="fx-options">
+            <label class="fx-toggle">
+              <input type="checkbox" id="chkGloss">
+              <span data-i18n="fxGloss">Reflet / Gloss Apple</span>
+            </label>
+
+            <label class="fx-toggle">
+              <input type="checkbox" id="chkBorder">
+              <span data-i18n="fxBorder">Bordure métallique</span>
+            </label>
+            <div id="borderOptions" style="display: none; align-items: center; gap: 8px; margin-top: 4px;">
+              <input type="color" id="borderColorPicker" value="#ccff00" style="width: 32px; height: 30px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+              <input type="range" id="borderWidthRange" min="2" max="30" value="8" style="flex: 1;">
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Accordion: Image Adjustments & Filters -->
+      <details class="accordion-item">
+        <summary class="accordion-header">
+          <span data-i18n="filterTitle">🎨 Ajustements d'image</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-content" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="brightness">Luminosité</span>
+              <span id="brightnessVal" class="control-label-value">100%</span>
+            </div>
+            <input type="range" id="brightnessRange" min="50" max="150" value="100">
+          </div>
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="contrast">Contraste</span>
+              <span id="contrastVal" class="control-label-value">100%</span>
+            </div>
+            <input type="range" id="contrastRange" min="50" max="150" value="100">
+          </div>
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="saturation">Saturation</span>
+              <span id="saturationVal" class="control-label-value">100%</span>
+            </div>
+            <input type="range" id="saturationRange" min="0" max="200" value="100">
+          </div>
+        </div>
+      </details>
 
       <!-- Zoom Slider -->
       <div class="control-group">
@@ -211,15 +301,15 @@
         </div>
       </div>
 
-      <!-- ZIP Export Format Checkboxes -->
+      <!-- ZIP Export Format Checkboxes & Framework Presets -->
       <div class="control-group">
         <label class="control-label" data-i18n="zipFormatsTitle">Choix des Formats à exporter (Pack ZIP)</label>
         <div class="export-options">
           <label class="checkbox-item">
             <input type="checkbox" id="chkIos" checked>
             <div class="checkbox-label">
-              <span class="checkbox-title">🍏 iOS Bundle (Xcode AppIconset)</span>
-              <span class="checkbox-desc" data-i18n="iosDesc">Inclus Contents.json + 12 tailles (1024, 180, 120, 167, 87...)</span>
+              <span class="checkbox-title">🍏 iOS Bundle (Xcode AppIconset + iOS 18)</span>
+              <span class="checkbox-desc" data-i18n="iosDesc">Contents.json + 12 tailles + Variantes Dark/Tinted</span>
             </div>
           </label>
 
@@ -227,7 +317,7 @@
             <input type="checkbox" id="chkAndroid" checked>
             <div class="checkbox-label">
               <span class="checkbox-title">🤖 Android Bundle (Mipmap & Play Store)</span>
-              <span class="checkbox-desc" data-i18n="androidDesc">Inclus res/mipmap (hdpi, xhdpi, xxhdpi...) + 512x512</span>
+              <span class="checkbox-desc" data-i18n="androidDesc">res/mipmap (hdpi, xhdpi, xxhdpi...) + 512x512</span>
             </div>
           </label>
 
@@ -240,20 +330,41 @@
           </label>
 
           <label class="checkbox-item">
+            <input type="checkbox" id="chkExpo" checked>
+            <div class="checkbox-label">
+              <span class="checkbox-title">🚀 Expo / React Native Bundle</span>
+              <span class="checkbox-desc">assets/icon.png, adaptive-icon.png, favicon.png</span>
+            </div>
+          </label>
+
+          <label class="checkbox-item">
             <input type="checkbox" id="chkMac" checked>
             <div class="checkbox-label">
               <span class="checkbox-title">💻 macOS Iconset Bundle</span>
               <span class="checkbox-desc" data-i18n="macDesc">Fichiers iconset de 16x16 jusqu'à 1024x1024</span>
             </div>
           </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" id="chkChromeExt">
+            <div class="checkbox-label">
+              <span class="checkbox-title">⚡ Chrome / Web Extension Icons</span>
+              <span class="checkbox-desc">icon16.png, icon48.png, icon128.png + manifest.json</span>
+            </div>
+          </label>
         </div>
       </div>
 
-      <!-- Export Actions -->
+      <!-- Export Actions & Snippets Code Modal Button -->
       <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
         <button id="btnExportZip" class="btn-export-acid">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="btnZip">Télécharger le pack ZIP (Tous les formats)</span>
+        </button>
+
+        <button id="btnOpenSnippets" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span data-i18n="btnSnippets">Obtenir le code HTML / Config</span>
         </button>
 
         <button id="btnExportSingle" class="btn-secondary">
@@ -263,6 +374,72 @@
 
     </div>
 
+  </div>
+
+  <!-- Code Snippets Modal -->
+  <div id="snippetsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><span data-i18n="snippetsTitle">Snippets & Code d'intégration</span></h3>
+        <button id="btnCloseModal" class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tabs">
+          <button class="tab-btn active" data-tab="tabHtml">HTML &lt;head&gt;</button>
+          <button class="tab-btn" data-tab="tabManifest">site.webmanifest</button>
+          <button class="tab-btn" data-tab="tabExpo">Expo app.json</button>
+        </div>
+
+        <div id="tabHtml" class="tab-content active">
+          <pre><code id="codeHtml">&lt;!-- Favicons & App Icons generated by Plancton --&gt;
+&lt;link rel="icon" type="image/x-icon" href="/favicon.ico"&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"&gt;
+&lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"&gt;
+&lt;link rel="manifest" href="/site.webmanifest"&gt;</code></pre>
+          <button class="btn-copy" data-copy="codeHtml">Copier le HTML</button>
+        </div>
+
+        <div id="tabManifest" class="tab-content">
+          <pre><code id="codeManifest">{
+  "name": "Plancton App",
+  "short_name": "Plancton",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#0a0b0e",
+  "background_color": "#0a0b0e",
+  "display": "standalone"
+}</code></pre>
+          <button class="btn-copy" data-copy="codeManifest">Copier le Manifest</button>
+        </div>
+
+        <div id="tabExpo" class="tab-content">
+          <pre><code id="codeExpo">{
+  "expo": {
+    "name": "My App",
+    "slug": "my-app",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#0a0b0e"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0b0e"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}</code></pre>
+          <button class="btn-copy" data-copy="codeExpo">Copier la Config Expo</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 </body>

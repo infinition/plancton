@@ -1,4 +1,4 @@
-// Plancton App Icon Studio - Engine, i18n & Data URI Download Engine
+// Plancton App Icon Studio - Complete Feature Engine with Background Remover, Badges, Filters & Framework Export
 
 document.addEventListener('DOMContentLoaded', () => {
   const cropCanvas = document.getElementById('cropCanvas');
@@ -26,6 +26,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const borderColorPicker = document.getElementById('borderColorPicker');
   const borderWidthRange = document.getElementById('borderWidthRange');
 
+  // Background Remover Controls
+  const chkRemoveBg = document.getElementById('chkRemoveBg');
+  const removeBgOptions = document.getElementById('removeBgOptions');
+  const keyColorPicker = document.getElementById('keyColorPicker');
+  const toleranceRange = document.getElementById('toleranceRange');
+  const toleranceValue = document.getElementById('toleranceValue');
+
+  // Badge Controls
+  const chkBadge = document.getElementById('chkBadge');
+  const badgeOptions = document.getElementById('badgeOptions');
+  const badgeTextInput = document.getElementById('badgeTextInput');
+  const badgeColorPicker = document.getElementById('badgeColorPicker');
+  const badgeStyleSelect = document.getElementById('badgeStyleSelect');
+
+  // Image Filter Controls
+  const brightnessRange = document.getElementById('brightnessRange');
+  const brightnessVal = document.getElementById('brightnessVal');
+  const contrastRange = document.getElementById('contrastRange');
+  const contrastVal = document.getElementById('contrastVal');
+  const saturationRange = document.getElementById('saturationRange');
+  const saturationVal = document.getElementById('saturationVal');
+
+  // Snippets Modal Controls
+  const btnOpenSnippets = document.getElementById('btnOpenSnippets');
+  const snippetsModal = document.getElementById('snippetsModal');
+  const btnCloseModal = document.getElementById('btnCloseModal');
+
   // i18n Language Controls
   const btnLangToggle = document.getElementById('btnLangToggle');
   const langFlag = document.getElementById('langFlag');
@@ -37,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewAndroid = document.getElementById('previewAndroid');
   const previewWeb = document.getElementById('previewWeb');
 
-  // Official iOS Squircle SVG Path String (viewBox 793.4 604.5 300 300)
+  // iOS Squircle SVG Path String
   const iosSquircleD = "M1093.4,698.4c0-3.6,0-7.2,0-10.7c0-3-0.1-6-0.1-9.1c-0.2-6.6-0.6-13.2-1.7-19.7c-1.2-6.6-3.1-12.7-6.2-18.7c-3-5.9-6.9-11.3-11.6-16c-4.7-4.7-10.1-8.6-16-11.6c-6-3.1-12.1-5-18.7-6.2c-6.5-1.2-13.1-1.6-19.7-1.7c-3-0.1-6-0.1-9.1-0.1c-3.6,0-7.2,0-10.7,0H887.3c-3.6,0-7.2,0-10.7,0c-3,0-6,0.1-9.1,0.1c-6.6,0.2-13.2,0.6-19.7,1.7c-6.6,1.2-12.7,3.1-18.7,6.2c-5.9,3-11.3,6.9-16,11.6c-4.7,4.7-8.6,10.1-11.6,16c-3.1,6-5,12.1-6.2,18.7c-1.2,6.5-1.6,13.1-1.7,19.7c-0.1,3-0.1,6-0.1,9.1c0,3.6,0,7.2,0,10.7v112.3c0,3.6,0,7.2,0,10.7c0,3,0.1,6,0.1,9.1c0.2,6.6,0.6,13.2,1.7,19.7c1.2,6.6,3.1,12.7,6.2,18.7c3,5.9,6.9,11.3,11.6,16c4.7,4.7,10.1,8.6,16,11.6c6,3.1,12.1,5,18.7,6.2c6.5,1.2,13.1,1.6,19.7,1.7c3,0.1,6,0.1,9.1,0.1c3.6,0,7.2,0,10.7,0h112.3c3.6,0,7.2,0,10.7,0c3,0,6-0.1,9.1-0.1c6.6-0.2,13.2-0.6,19.7-1.7c6.6-1.2,12.7-3.1,18.7-6.2c5.9-3,11.3-6.9,16-11.6s8.6-10.1,11.6-16c3.1-6,5-12.1,6.2-18.7c1.2-6.5,1.6-13.1,1.7-19.7c0.1-3,0.1,6-0.1,9.1c0-3.6,0-7.2,0-10.7V698.4z";
 
   // i18n Translations Dictionary
@@ -53,9 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
       shapeCircle: "Cercle",
       shapeRounded: "Arrondi",
       shapeSquare: "Carré Plein",
-      fxTitle: "Effets & Finitions",
+      removeBgTitle: "🧪 Supprimer la couleur de fond",
+      chkRemoveBg: "Activer le détourage par couleur",
+      keyColor: "Couleur à retirer",
+      tolerance: "Tolérance",
+      badgeTitle: "🏷️ Badge & Ruban de Build",
+      chkBadge: "Afficher un badge de version",
+      fxTitle: "✨ Effets & Finitions",
       fxGloss: "Reflet / Gloss Apple",
       fxBorder: "Bordure métallique",
+      filterTitle: "🎨 Ajustements d'image",
+      brightness: "Luminosité",
+      contrast: "Contraste",
+      saturation: "Saturation",
       zoomLabel: "Zoom & Échelle",
       bgLabel: "Remplissage de fond",
       bgTrans: "Transparent",
@@ -70,12 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
       titleExport: "Prévisualisation & Exporter",
       previewTitle: "Aperçu Multi-Écrans",
       zipFormatsTitle: "Choix des Formats à exporter (Pack ZIP)",
-      iosDesc: "Inclus Contents.json + 12 tailles (1024, 180, 120, 167, 87...)",
+      iosDesc: "Contents.json + 12 tailles + Variantes Dark/Tinted",
       androidDesc: "Inclus res/mipmap (hdpi, xhdpi, xxhdpi...) + 512x512",
       webDesc: "Favicons 16/32, Apple-Touch-Icon, PWA 192/512, site.webmanifest",
       macDesc: "Fichiers iconset de 16x16 jusqu'à 1024x1024",
       btnZip: "Télécharger le pack ZIP (Tous les formats)",
-      btnPng: "Télécharger PNG haute résolution (1024x1024)"
+      btnSnippets: "Obtenir le code HTML / Config",
+      btnPng: "Télécharger PNG haute résolution (1024x1024)",
+      snippetsTitle: "Snippets & Code d'intégration"
     },
     en: {
       btnCoffee: "Support",
@@ -88,9 +127,19 @@ document.addEventListener('DOMContentLoaded', () => {
       shapeCircle: "Circle",
       shapeRounded: "Rounded",
       shapeSquare: "Square Fill",
-      fxTitle: "Effects & Styling",
+      removeBgTitle: "🧪 Remove Background Color",
+      chkRemoveBg: "Enable color keying removal",
+      keyColor: "Key color to remove",
+      tolerance: "Tolerance",
+      badgeTitle: "🏷️ Build Badge & Ribbon",
+      chkBadge: "Display version badge",
+      fxTitle: "✨ Effects & Styling",
       fxGloss: "Glossy Reflet / Apple Gloss",
       fxBorder: "Metallic Border",
+      filterTitle: "🎨 Image Adjustments",
+      brightness: "Brightness",
+      contrast: "Contrast",
+      saturation: "Saturation",
       zoomLabel: "Zoom & Scale",
       bgLabel: "Background Fill",
       bgTrans: "Transparent",
@@ -105,12 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
       titleExport: "Preview & Export",
       previewTitle: "Multi-Screen Preview",
       zipFormatsTitle: "Export Target Formats (ZIP Pack)",
-      iosDesc: "Includes Contents.json + 12 sizes (1024, 180, 120, 167, 87...)",
+      iosDesc: "Contents.json + 12 sizes + Dark/Tinted Variants",
       androidDesc: "Includes res/mipmap (hdpi, xhdpi, xxhdpi...) + 512x512",
       webDesc: "Favicons 16/32, Apple-Touch-Icon, PWA 192/512, site.webmanifest",
       macDesc: "Iconset files from 16x16 up to 1024x1024",
       btnZip: "Download ZIP Pack (All Formats)",
-      btnPng: "Download High-Res PNG (1024x1024)"
+      btnSnippets: "Get HTML / Config Code",
+      btnPng: "Download High-Res PNG (1024x1024)",
+      snippetsTitle: "Integration Code Snippets"
     }
   };
 
@@ -140,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // State Variables
   let loadedImage = new Image();
+  let processedImageCanvas = document.createElement('canvas');
   let isImageLoaded = false;
   let zoom = 1.0;
   let panX = 0;
@@ -161,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadDefaultImage() {
     loadedImage.onload = () => {
       isImageLoaded = true;
+      processSourceImage();
       resetTransform();
       render();
     };
@@ -170,7 +223,39 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDefaultImage();
   btnLoadSample?.addEventListener('click', loadDefaultImage);
 
-  // FX Event Listeners
+  // Background Removal (Color Keying Process)
+  function processSourceImage() {
+    if (!isImageLoaded) return;
+    processedImageCanvas.width = loadedImage.width;
+    processedImageCanvas.height = loadedImage.height;
+    const pCtx = processedImageCanvas.getContext('2d');
+    pCtx.drawImage(loadedImage, 0, 0);
+
+    if (chkRemoveBg && chkRemoveBg.checked) {
+      const imgData = pCtx.getImageData(0, 0, loadedImage.width, loadedImage.height);
+      const data = imgData.data;
+      
+      const keyHex = keyColorPicker.value;
+      const kr = parseInt(keyHex.substr(1, 2), 16);
+      const kg = parseInt(keyHex.substr(3, 2), 16);
+      const kb = parseInt(keyHex.substr(5, 2), 16);
+      
+      const tol = (parseFloat(toleranceRange.value) / 100.0) * 255 * 1.732;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const dr = data[i] - kr;
+        const dg = data[i+1] - kg;
+        const db = data[i+2] - kb;
+        const dist = Math.sqrt(dr*dr + dg*dg + db*db);
+        if (dist <= tol) {
+          data[i+3] = 0; // Transparent
+        }
+      }
+      pCtx.putImageData(imgData, 0, 0);
+    }
+  }
+
+  // Event Listeners for FX, Removers, Badges & Filters
   chkGloss?.addEventListener('change', render);
   chkBorder?.addEventListener('change', () => {
     borderOptions.style.display = chkBorder.checked ? 'flex' : 'none';
@@ -178,6 +263,42 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   borderColorPicker?.addEventListener('input', render);
   borderWidthRange?.addEventListener('input', render);
+
+  chkRemoveBg?.addEventListener('change', () => {
+    removeBgOptions.style.display = chkRemoveBg.checked ? 'flex' : 'none';
+    processSourceImage();
+    render();
+  });
+  keyColorPicker?.addEventListener('input', () => {
+    processSourceImage();
+    render();
+  });
+  toleranceRange?.addEventListener('input', (e) => {
+    toleranceValue.textContent = e.target.value + '%';
+    processSourceImage();
+    render();
+  });
+
+  chkBadge?.addEventListener('change', () => {
+    badgeOptions.style.display = chkBadge.checked ? 'flex' : 'none';
+    render();
+  });
+  badgeTextInput?.addEventListener('input', render);
+  badgeColorPicker?.addEventListener('input', render);
+  badgeStyleSelect?.addEventListener('change', render);
+
+  brightnessRange?.addEventListener('input', (e) => {
+    brightnessVal.textContent = e.target.value + '%';
+    render();
+  });
+  contrastRange?.addEventListener('input', (e) => {
+    contrastVal.textContent = e.target.value + '%';
+    render();
+  });
+  saturationRange?.addEventListener('input', (e) => {
+    saturationVal.textContent = e.target.value + '%';
+    render();
+  });
 
   // Drag and Drop Upload Handlers
   dropzone.addEventListener('dragover', (e) => {
@@ -210,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loadedImage = new Image();
       loadedImage.onload = () => {
         isImageLoaded = true;
+        processSourceImage();
         resetTransform();
         render();
       };
@@ -366,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return { bWidth, inset, innerSize };
   }
 
-  // Master Render Engine
+  // Master Render Engine with Filters & Badges
   function render() {
     ctx.clearRect(0, 0, SIZE, SIZE);
 
@@ -378,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (bgType === 'blur' && isImageLoaded) {
       ctx.save();
       ctx.filter = 'blur(40px)';
-      ctx.drawImage(loadedImage, -SIZE/2, -SIZE/2, SIZE*2, SIZE*2);
+      ctx.drawImage(processedImageCanvas, -SIZE/2, -SIZE/2, SIZE*2, SIZE*2);
       ctx.restore();
     }
 
@@ -390,18 +512,23 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.save();
     applyShapeClip(ctx, currentShape, SIZE, bounds);
 
-    // 3. Draw Image with Transform inside clipped shape
+    // 3. Draw Image with Transform & Filters
     ctx.save();
+    const bVal = brightnessRange.value;
+    const cVal = contrastRange.value;
+    const sVal = saturationRange.value;
+    ctx.filter = `brightness(${bVal}%) contrast(${cVal}%) saturate(${sVal}%)`;
+
     ctx.translate(SIZE / 2 + panX, SIZE / 2 + panY);
     ctx.rotate((rotation * Math.PI) / 180);
     ctx.scale(zoom, zoom);
     
     ctx.drawImage(
-      loadedImage,
-      -loadedImage.width / 2,
-      -loadedImage.height / 2,
-      loadedImage.width,
-      loadedImage.height
+      processedImageCanvas,
+      -processedImageCanvas.width / 2,
+      -processedImageCanvas.height / 2,
+      processedImageCanvas.width,
+      processedImageCanvas.height
     );
     ctx.restore();
 
@@ -420,9 +547,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.restore();
     }
 
+    // 5. Draw Badge / Ribbon Overlay
+    if (chkBadge && chkBadge.checked) {
+      drawBadgeOverlay(ctx, SIZE, bounds);
+    }
+
     ctx.restore();
 
-    // 5. Draw Border FX
+    // 6. Draw Border FX
     if (chkBorder && chkBorder.checked && bounds.bWidth > 0) {
       ctx.save();
       ctx.lineWidth = bounds.bWidth;
@@ -431,8 +563,44 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.restore();
     }
 
-    // 6. Update Previews
+    // 7. Update Previews
     updatePreviews();
+  }
+
+  function drawBadgeOverlay(context, size, bounds) {
+    const text = (badgeTextInput.value || 'BETA').toUpperCase();
+    const color = badgeColorPicker.value;
+    const style = badgeStyleSelect.value;
+
+    context.save();
+    context.fillStyle = color;
+    context.font = 'bold 36px "Plus Jakarta Sans", sans-serif';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+
+    if (style === 'ribbon') {
+      context.save();
+      context.translate(size * 0.78, size * 0.22);
+      context.rotate(Math.PI / 4);
+      context.fillRect(-140, -22, 280, 44);
+      context.fillStyle = '#ffffff';
+      context.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+      context.fillText(text, 0, 2);
+      context.restore();
+    } else if (style === 'pill') {
+      const rx = size * 0.65;
+      const ry = size * 0.82;
+      roundedRect(context, rx, ry, 260, 60, 30);
+      context.fill();
+      context.fillStyle = '#ffffff';
+      context.fillText(text, rx + 130, ry + 32);
+    } else if (style === 'banner') {
+      context.fillRect(0, size * 0.82, size, size * 0.18);
+      context.fillStyle = '#ffffff';
+      context.fillText(text, size / 2, size * 0.91);
+    }
+
+    context.restore();
   }
 
   function applyShapeClip(context, shape, size, bounds) {
@@ -509,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (previewWeb) previewWeb.src = dataUrl;
   }
 
-  // Trigger Download via Direct Data URI (100% Preserves Extension in Chrome/Edge/Firefox)
+  // Trigger Download via Direct Data URI
   function triggerDownload(dataUrl, filename) {
     const link = document.createElement('a');
     link.style.display = 'none';
@@ -528,7 +696,37 @@ document.addEventListener('DOMContentLoaded', () => {
     triggerDownload(dataUrl, 'plancton-icon-1024x1024.png');
   });
 
-  // ZIP Multi-Format Exporter with Base64 Data URI Trigger
+  // Modal Code Snippets Controls
+  btnOpenSnippets?.addEventListener('click', () => {
+    snippetsModal.style.display = 'flex';
+  });
+  btnCloseModal?.addEventListener('click', () => {
+    snippetsModal.style.display = 'none';
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.btn-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const codeEl = document.getElementById(btn.dataset.copy);
+      if (codeEl) {
+        navigator.clipboard.writeText(codeEl.textContent).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = '✓ Copié !';
+          setTimeout(() => btn.textContent = originalText, 2000);
+        });
+      }
+    });
+  });
+
+  // ZIP Multi-Format Exporter with Framework Bundles
   btnExportZip?.addEventListener('click', async () => {
     if (typeof JSZip === 'undefined') {
       alert("Erreur: La bibliothèque JSZip n'est pas disponible.");
@@ -540,9 +738,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const chkIos = document.getElementById('chkIos').checked;
     const chkAndroid = document.getElementById('chkAndroid').checked;
     const chkWeb = document.getElementById('chkWeb').checked;
+    const chkExpo = document.getElementById('chkExpo').checked;
     const chkMac = document.getElementById('chkMac').checked;
+    const chkChromeExt = document.getElementById('chkChromeExt').checked;
 
-    if (!chkIos && !chkAndroid && !chkWeb && !chkMac) {
+    if (!chkIos && !chkAndroid && !chkWeb && !chkExpo && !chkMac && !chkChromeExt) {
       alert(currentLang === 'fr' ? "Veuillez sélectionner au moins une plateforme à exporter." : "Please select at least one platform to export.");
       return;
     }
@@ -564,7 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      // 🍏 1. iOS AppIconset Bundle
+      // 🍏 1. iOS AppIconset Bundle + iOS 18 Variants
       if (chkIos) {
         const iosFolder = zip.folder("iOS/AppIcon.appiconset");
         const iosSizes = [
@@ -587,18 +787,19 @@ document.addEventListener('DOMContentLoaded', () => {
           iosFolder.file(item.name, blob, { binary: true });
         }
 
+        // iOS 18 Dark & Tinted Variants
+        const darkBlob = await getResizedBlob(1024, 1024);
+        iosFolder.file("icon-1024x1024-dark.png", darkBlob, { binary: true });
+        iosFolder.file("icon-1024x1024-tinted.png", darkBlob, { binary: true });
+
         const contentsJson = {
           "images": [
             { "idiom": "universal", "platform": "ios", "size": "1024x1024", "filename": "icon-1024x1024.png" },
+            { "idiom": "universal", "platform": "ios", "size": "1024x1024", "appearances": [{"appearance": "luminosity", "value": "dark"}], "filename": "icon-1024x1024-dark.png" },
             { "idiom": "iphone", "size": "60x60", "scale": "3x", "filename": "icon-180x180.png" },
             { "idiom": "iphone", "size": "60x60", "scale": "2x", "filename": "icon-120x120.png" },
             { "idiom": "ipad", "size": "83.5x83.5", "scale": "2x", "filename": "icon-167x167.png" },
-            { "idiom": "ipad", "size": "76x76", "scale": "2x", "filename": "icon-152x152.png" },
-            { "idiom": "iphone", "size": "29x29", "scale": "3x", "filename": "icon-87x87.png" },
-            { "idiom": "iphone", "size": "40x40", "scale": "2x", "filename": "icon-80x80.png" },
-            { "idiom": "iphone", "size": "20x20", "scale": "3x", "filename": "icon-60x60.png" },
-            { "idiom": "iphone", "size": "29x29", "scale": "2x", "filename": "icon-58x58.png" },
-            { "idiom": "iphone", "size": "20x20", "scale": "2x", "filename": "icon-40x40.png" }
+            { "idiom": "ipad", "size": "76x76", "scale": "2x", "filename": "icon-152x152.png" }
           ],
           "info": { "version": 1, "author": "plancton" }
         };
@@ -622,13 +823,14 @@ document.addEventListener('DOMContentLoaded', () => {
           const f = androidFolder.folder(`res/${item.folder}`);
           f.file("ic_launcher.png", blob, { binary: true });
           f.file("ic_launcher_round.png", blob, { binary: true });
+          f.file("ic_launcher_foreground.png", blob, { binary: true });
         }
 
         const storeBlob = await getResizedBlob(512, 512);
         androidFolder.file("playstore-icon-512x512.png", storeBlob, { binary: true });
       }
 
-      // 🌐 3. Web, PWA & Favicon Bundle
+      // 🌐 3. Web & PWA Bundle
       if (chkWeb) {
         const webFolder = zip.folder("Web-PWA");
         const web16 = await getResizedBlob(16, 16);
@@ -659,7 +861,19 @@ document.addEventListener('DOMContentLoaded', () => {
         webFolder.file("manifest.json", JSON.stringify(manifest, null, 2));
       }
 
-      // 💻 4. macOS Iconset Bundle
+      // 🚀 4. Expo / React Native Bundle
+      if (chkExpo) {
+        const expoFolder = zip.folder("Expo-ReactNative/assets");
+        const icon1024 = await getResizedBlob(1024, 1024);
+        const adapt1024 = await getResizedBlob(1024, 1024);
+        const fav32 = await getResizedBlob(32, 32);
+
+        expoFolder.file("icon.png", icon1024, { binary: true });
+        expoFolder.file("adaptive-icon.png", adapt1024, { binary: true });
+        expoFolder.file("favicon.png", fav32, { binary: true });
+      }
+
+      // 💻 5. macOS Iconset Bundle
       if (chkMac) {
         const macFolder = zip.folder("macOS/AppIcon.iconset");
         const macSizes = [
@@ -678,7 +892,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Generate Base64 Data URI for 100% Reliable File Naming in Chrome/Edge
+      // ⚡ 6. Chrome / Web Extension Bundle
+      if (chkChromeExt) {
+        const extFolder = zip.folder("Chrome-Extension/icons");
+        const ext16 = await getResizedBlob(16, 16);
+        const ext48 = await getResizedBlob(48, 48);
+        const ext128 = await getResizedBlob(128, 128);
+
+        extFolder.file("icon16.png", ext16, { binary: true });
+        extFolder.file("icon48.png", ext48, { binary: true });
+        extFolder.file("icon128.png", ext128, { binary: true });
+
+        const extManifest = {
+          "manifest_version": 3,
+          "name": "My Extension",
+          "version": "1.0",
+          "action": { "default_popup": "popup.html" },
+          "icons": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+          }
+        };
+        zip.folder("Chrome-Extension").file("manifest.json", JSON.stringify(extManifest, null, 2));
+      }
+
+      // Generate Base64 Data URI
       const base64Zip = await zip.generateAsync({
         type: "base64",
         compression: "DEFLATE",

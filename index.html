@@ -157,8 +157,29 @@
               <input type="checkbox" id="chkGloss">
               <span data-i18n="fxGloss">Reflet / Gloss Apple</span>
             </label>
+            <div id="glossOptions" style="display: none; flex-direction: column; gap: 8px; margin-top: 4px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 11px; color: var(--text-muted);" data-i18n="glossColor">Couleur & Opacité</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="color" id="glossColorPicker" value="#ffffff" style="width: 32px; height: 28px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+                  <span id="glossOpacityVal" class="control-label-value">40%</span>
+                </div>
+              </div>
+              <input type="range" id="glossOpacityRange" min="0" max="100" value="40">
 
-            <label class="fx-toggle">
+              <div class="control-label">
+                <span data-i18n="glossAngle">Orientation Angle (360°)</span>
+                <span id="glossAngleVal" class="control-label-value">0°</span>
+              </div>
+              <input type="range" id="glossAngleRange" min="0" max="360" value="0">
+
+              <label class="fx-toggle" style="margin-top: 4px;">
+                <input type="checkbox" id="chkGlossBehind">
+                <span style="font-size: 11px;" data-i18n="glossBehind">Affecter le fond uniquement (sous le PNG)</span>
+              </label>
+            </div>
+
+            <label class="fx-toggle" style="margin-top: 6px;">
               <input type="checkbox" id="chkBorder">
               <span data-i18n="fxBorder">Bordure métallique</span>
             </label>

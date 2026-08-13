@@ -1,4 +1,4 @@
-// Plancton App Icon Studio - Complete Feature Engine with Background Remover, Badges, Filters & Framework Export
+// Plancton App Icon Studio - Complete Feature Engine with 360° Gloss Reflet, Background Remover & FX
 
 document.addEventListener('DOMContentLoaded', () => {
   const cropCanvas = document.getElementById('cropCanvas');
@@ -19,8 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnExportZip = document.getElementById('btnExportZip');
   const btnExportSingle = document.getElementById('btnExportSingle');
 
-  // FX Controls
+  // Gloss Controls
   const chkGloss = document.getElementById('chkGloss');
+  const glossOptions = document.getElementById('glossOptions');
+  const glossColorPicker = document.getElementById('glossColorPicker');
+  const glossOpacityRange = document.getElementById('glossOpacityRange');
+  const glossOpacityVal = document.getElementById('glossOpacityVal');
+  const glossAngleRange = document.getElementById('glossAngleRange');
+  const glossAngleVal = document.getElementById('glossAngleVal');
+  const chkGlossBehind = document.getElementById('chkGlossBehind');
+
+  // Border Controls
   const chkBorder = document.getElementById('chkBorder');
   const borderOptions = document.getElementById('borderOptions');
   const borderColorPicker = document.getElementById('borderColorPicker');
@@ -88,6 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
       chkBadge: "Afficher un badge de version",
       fxTitle: "✨ Effets & Finitions",
       fxGloss: "Reflet / Gloss Apple",
+      glossColor: "Couleur & Opacité",
+      glossAngle: "Orientation Angle (360°)",
+      glossBehind: "Affecter le fond uniquement (sous le PNG)",
       fxBorder: "Bordure métallique",
       filterTitle: "🎨 Ajustements d'image",
       brightness: "Luminosité",
@@ -135,6 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
       chkBadge: "Display version badge",
       fxTitle: "✨ Effects & Styling",
       fxGloss: "Glossy Reflet / Apple Gloss",
+      glossColor: "Color & Opacity",
+      glossAngle: "Reflection Angle (360°)",
+      glossBehind: "Apply to background only (behind PNG)",
       fxBorder: "Metallic Border",
       filterTitle: "🎨 Image Adjustments",
       brightness: "Brightness",
@@ -248,15 +263,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const db = data[i+2] - kb;
         const dist = Math.sqrt(dr*dr + dg*dg + db*db);
         if (dist <= tol) {
-          data[i+3] = 0; // Transparent
+          data[i+3] = 0;
         }
       }
       pCtx.putImageData(imgData, 0, 0);
     }
   }
 
-  // Event Listeners for FX, Removers, Badges & Filters
-  chkGloss?.addEventListener('change', render);
+  // Gloss Reflet Controls & Event Listeners
+  chkGloss?.addEventListener('change', () => {
+    glossOptions.style.display = chkGloss.checked ? 'flex' : 'none';
+    render();
+  });
+  glossColorPicker?.addEventListener('input', render);
+  glossOpacityRange?.addEventListener('input', (e) => {
+    glossOpacityVal.textContent = e.target.value + '%';
+    render();
+  });
+  glossAngleRange?.addEventListener('input', (e) => {
+    glossAngleVal.textContent = e.target.value + '°';
+    render();
+  });
+  chkGlossBehind?.addEventListener('change', render);
+
+  // Border Controls
   chkBorder?.addEventListener('change', () => {
     borderOptions.style.display = chkBorder.checked ? 'flex' : 'none';
     render();
@@ -264,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
   borderColorPicker?.addEventListener('input', render);
   borderWidthRange?.addEventListener('input', render);
 
+  // Background Remover Controls
   chkRemoveBg?.addEventListener('change', () => {
     removeBgOptions.style.display = chkRemoveBg.checked ? 'flex' : 'none';
     processSourceImage();
@@ -279,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   });
 
+  // Badge Controls
   chkBadge?.addEventListener('change', () => {
     badgeOptions.style.display = chkBadge.checked ? 'flex' : 'none';
     render();
@@ -287,6 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
   badgeColorPicker?.addEventListener('input', render);
   badgeStyleSelect?.addEventListener('change', render);
 
+  // Filter Controls
   brightnessRange?.addEventListener('input', (e) => {
     brightnessVal.textContent = e.target.value + '%';
     render();
@@ -488,11 +521,65 @@ document.addEventListener('DOMContentLoaded', () => {
     return { bWidth, inset, innerSize };
   }
 
-  // Master Render Engine with Filters & Badges
+  // Draw 360° Rotatable Gloss Sheen FX with Custom Color & Opacity
+  function drawGlossEffect(context) {
+    const angleDeg = parseFloat(glossAngleRange.value || 0);
+    const opacity = parseFloat(glossOpacityRange.value || 40) / 100.0;
+    const colorHex = glossColorPicker.value || '#ffffff';
+
+    const r = parseInt(colorHex.substr(1, 2), 16);
+    const g = parseInt(colorHex.substr(3, 2), 16);
+    const b = parseInt(colorHex.substr(5, 2), 16);
+
+    const rad = (angleDeg * Math.PI) / 180.0;
+    const cx = SIZE / 2;
+    const cy = SIZE / 2;
+    const len = SIZE / 2;
+
+    const x1 = cx - len * Math.cos(rad);
+    const y1 = cy - len * Math.sin(rad);
+    const x2 = cx + len * Math.cos(rad);
+    const y2 = cy + len * Math.sin(rad);
+
+    const glossGrad = context.createLinearGradient(x1, y1, x2, y2);
+    glossGrad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${opacity})`);
+    glossGrad.addColorStop(0.45, `rgba(${r}, ${g}, ${b}, ${opacity * 0.25})`);
+    glossGrad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+
+    context.save();
+    context.fillStyle = glossGrad;
+    context.beginPath();
+    context.rect(0, 0, SIZE, SIZE);
+    context.fill();
+    context.restore();
+  }
+
+  function drawUploadedImage(context) {
+    context.save();
+    const bVal = brightnessRange.value;
+    const cVal = contrastRange.value;
+    const sVal = saturationRange.value;
+    context.filter = `brightness(${bVal}%) contrast(${cVal}%) saturate(${sVal}%)`;
+
+    context.translate(SIZE / 2 + panX, SIZE / 2 + panY);
+    context.rotate((rotation * Math.PI) / 180);
+    context.scale(zoom, zoom);
+    
+    context.drawImage(
+      processedImageCanvas,
+      -processedImageCanvas.width / 2,
+      -processedImageCanvas.height / 2,
+      processedImageCanvas.width,
+      processedImageCanvas.height
+    );
+    context.restore();
+  }
+
+  // Master Render Engine with Layered Gloss Support
   function render() {
     ctx.clearRect(0, 0, SIZE, SIZE);
 
-    // 1. Draw Background
+    // 1. Draw Background Fill
     const bgType = bgTypeSelect.value;
     if (bgType === 'color') {
       ctx.fillStyle = bgColorPicker.value;
@@ -512,49 +599,30 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.save();
     applyShapeClip(ctx, currentShape, SIZE, bounds);
 
-    // 3. Draw Image with Transform & Filters
-    ctx.save();
-    const bVal = brightnessRange.value;
-    const cVal = contrastRange.value;
-    const sVal = saturationRange.value;
-    ctx.filter = `brightness(${bVal}%) contrast(${cVal}%) saturate(${sVal}%)`;
+    const isGlossActive = chkGloss && chkGloss.checked;
+    const isGlossBehind = chkGlossBehind && chkGlossBehind.checked;
 
-    ctx.translate(SIZE / 2 + panX, SIZE / 2 + panY);
-    ctx.rotate((rotation * Math.PI) / 180);
-    ctx.scale(zoom, zoom);
-    
-    ctx.drawImage(
-      processedImageCanvas,
-      -processedImageCanvas.width / 2,
-      -processedImageCanvas.height / 2,
-      processedImageCanvas.width,
-      processedImageCanvas.height
-    );
-    ctx.restore();
-
-    // 4. Draw Reflet / Gloss Sheen FX
-    if (chkGloss && chkGloss.checked) {
-      const glossGrad = ctx.createLinearGradient(0, bounds.inset, 0, bounds.inset + bounds.innerSize * 0.55);
-      glossGrad.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
-      glossGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
-      glossGrad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-
-      ctx.save();
-      ctx.fillStyle = glossGrad;
-      ctx.beginPath();
-      ctx.rect(0, 0, SIZE, SIZE * 0.5);
-      ctx.fill();
-      ctx.restore();
+    // 3. Draw Layers (Order depends on chkGlossBehind)
+    if (isGlossActive && isGlossBehind) {
+      // Gloss on background ONLY (Behind image)
+      drawGlossEffect(ctx);
+      drawUploadedImage(ctx);
+    } else {
+      // Default: Image first, Gloss on top
+      drawUploadedImage(ctx);
+      if (isGlossActive) {
+        drawGlossEffect(ctx);
+      }
     }
 
-    // 5. Draw Badge / Ribbon Overlay
+    // 4. Draw Badge / Ribbon Overlay
     if (chkBadge && chkBadge.checked) {
       drawBadgeOverlay(ctx, SIZE, bounds);
     }
 
     ctx.restore();
 
-    // 6. Draw Border FX
+    // 5. Draw Border FX
     if (chkBorder && chkBorder.checked && bounds.bWidth > 0) {
       ctx.save();
       ctx.lineWidth = bounds.bWidth;
@@ -563,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.restore();
     }
 
-    // 7. Update Previews
+    // 6. Update Previews
     updatePreviews();
   }
 
@@ -677,7 +745,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (previewWeb) previewWeb.src = dataUrl;
   }
 
-  // Trigger Download via Direct Data URI
   function triggerDownload(dataUrl, filename) {
     const link = document.createElement('a');
     link.style.display = 'none';
@@ -726,7 +793,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ZIP Multi-Format Exporter with Framework Bundles
+  // ZIP Multi-Format Exporter
   btnExportZip?.addEventListener('click', async () => {
     if (typeof JSZip === 'undefined') {
       alert("Erreur: La bibliothèque JSZip n'est pas disponible.");
@@ -764,7 +831,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      // 🍏 1. iOS AppIconset Bundle + iOS 18 Variants
       if (chkIos) {
         const iosFolder = zip.folder("iOS/AppIcon.appiconset");
         const iosSizes = [
@@ -787,7 +853,6 @@ document.addEventListener('DOMContentLoaded', () => {
           iosFolder.file(item.name, blob, { binary: true });
         }
 
-        // iOS 18 Dark & Tinted Variants
         const darkBlob = await getResizedBlob(1024, 1024);
         iosFolder.file("icon-1024x1024-dark.png", darkBlob, { binary: true });
         iosFolder.file("icon-1024x1024-tinted.png", darkBlob, { binary: true });
@@ -807,7 +872,6 @@ document.addEventListener('DOMContentLoaded', () => {
         iosFolder.file("Contents.json", JSON.stringify(contentsJson, null, 2));
       }
 
-      // 🤖 2. Android Mipmap & Play Store
       if (chkAndroid) {
         const androidFolder = zip.folder("Android");
         const androidSizes = [
@@ -830,7 +894,6 @@ document.addEventListener('DOMContentLoaded', () => {
         androidFolder.file("playstore-icon-512x512.png", storeBlob, { binary: true });
       }
 
-      // 🌐 3. Web & PWA Bundle
       if (chkWeb) {
         const webFolder = zip.folder("Web-PWA");
         const web16 = await getResizedBlob(16, 16);
@@ -861,7 +924,6 @@ document.addEventListener('DOMContentLoaded', () => {
         webFolder.file("manifest.json", JSON.stringify(manifest, null, 2));
       }
 
-      // 🚀 4. Expo / React Native Bundle
       if (chkExpo) {
         const expoFolder = zip.folder("Expo-ReactNative/assets");
         const icon1024 = await getResizedBlob(1024, 1024);
@@ -873,7 +935,6 @@ document.addEventListener('DOMContentLoaded', () => {
         expoFolder.file("favicon.png", fav32, { binary: true });
       }
 
-      // 💻 5. macOS Iconset Bundle
       if (chkMac) {
         const macFolder = zip.folder("macOS/AppIcon.iconset");
         const macSizes = [
@@ -892,7 +953,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // ⚡ 6. Chrome / Web Extension Bundle
       if (chkChromeExt) {
         const extFolder = zip.folder("Chrome-Extension/icons");
         const ext16 = await getResizedBlob(16, 16);
@@ -917,7 +977,6 @@ document.addEventListener('DOMContentLoaded', () => {
         zip.folder("Chrome-Extension").file("manifest.json", JSON.stringify(extManifest, null, 2));
       }
 
-      // Generate Base64 Data URI
       const base64Zip = await zip.generateAsync({
         type: "base64",
         compression: "DEFLATE",

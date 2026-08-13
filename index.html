@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Plancton | App Icon Studio & Cropper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/jszip.min.js"></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+
+  <!-- Header Navbar -->
+  <header>
+    <div class="logo-group">
+      <img src="assets/favicon.png" alt="Plancton Logo" class="logo-icon-img" width="38" height="38">
+      <h1 class="logo-title">Plancton</h1>
+    </div>
+    <div class="nav-actions">
+      <!-- GitHub Link -->
+      <a href="https://github.com/infinition/plancton" target="_blank" rel="noopener" class="btn-github" title="GitHub Repository">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+
+      <!-- Language Switcher Button -->
+      <button id="btnLangToggle" class="btn-lang" title="Changer de langue / Switch Language">
+        <span id="langFlag">🇫🇷</span> <span id="langLabel">FR</span>
+      </button>
+
+      <button id="btnLoadSample" class="btn-sample">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span data-i18n="loadSample">Charger l'image modèle</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- App Workspace -->
+  <div class="app-container">
+
+    <!-- Panel Left: Import & Controls -->
+    <div class="panel panel-left">
+      <div class="panel-title">
+        <span data-i18n="titleImport">Importation & Forme</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+
+      <!-- File Dropzone -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="dropLabel">Déposer votre image</label>
+        <div id="dropzone" class="dropzone">
+          <input type="file" id="fileInput" accept="image/*">
+          <div class="dropzone-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="dropzone-text" data-i18n="dropText">Glissez une image ici</div>
+          <div class="dropzone-subtext" data-i18n="dropSub">ou cliquez pour parcourir (PNG, JPG, SVG)</div>
+        </div>
+      </div>
+
+      <!-- Shape Mask Selector -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="shapeLabel">Format de masque</label>
+        <div class="shape-selector">
+          <button class="shape-btn active" data-shape="ios">
+            <div class="shape-preview-icon squircle"></div>
+            <span>iOS Squircle</span>
+          </button>
+          <button class="shape-btn" data-shape="circle">
+            <div class="shape-preview-icon circle"></div>
+            <span data-i18n="shapeCircle">Cercle</span>
+          </button>
+          <button class="shape-btn" data-shape="rounded">
+            <div class="shape-preview-icon rounded"></div>
+            <span data-i18n="shapeRounded">Arrondi</span>
+          </button>
+          <button class="shape-btn" data-shape="macos">
+            <div class="shape-preview-icon macos"></div>
+            <span>macOS Tile</span>
+          </button>
+          <button class="shape-btn" data-shape="square">
+            <div class="shape-preview-icon square"></div>
+            <span data-i18n="shapeSquare">Carré Plein</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Effects Section (Reflet, Gloss, Bordure) -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="fxTitle">Effets & Finitions</label>
+        <div class="fx-options">
+          <label class="fx-toggle">
+            <input type="checkbox" id="chkGloss">
+            <span data-i18n="fxGloss">Reflet / Gloss Apple</span>
+          </label>
+
+          <label class="fx-toggle">
+            <input type="checkbox" id="chkBorder">
+            <span data-i18n="fxBorder">Bordure métallique</span>
+          </label>
+          <div id="borderOptions" style="display: none; align-items: center; gap: 8px; margin-top: 4px;">
+            <input type="color" id="borderColorPicker" value="#ccff00" style="width: 32px; height: 30px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+            <input type="range" id="borderWidthRange" min="2" max="30" value="8" style="flex: 1;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Zoom Slider -->
+      <div class="control-group">
+        <div class="control-label">
+          <span data-i18n="zoomLabel">Zoom & Échelle</span>
+          <span id="zoomValue" class="control-label-value">1.00x</span>
+        </div>
+        <input type="range" id="zoomRange" min="0.2" max="4.0" step="0.02" value="1.0">
+      </div>
+
+      <!-- Background Fill -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="bgLabel">Remplissage de fond</label>
+        <div style="display: flex; gap: 10px;">
+          <select id="bgTypeSelect" style="flex:1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px; outline: none;">
+            <option value="transparent" data-i18n="bgTrans">Transparent</option>
+            <option value="color" data-i18n="bgColor">Couleur Unie</option>
+            <option value="blur" data-i18n="bgBlur">Flou de l'image</option>
+          </select>
+          <input type="color" id="bgColorPicker" value="#12141a" style="width: 40px; height: 38px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: var(--radius-sm); cursor: pointer;">
+        </div>
+      </div>
+
+      <!-- Manipulation Tools -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="toolsLabel">Ajustements</label>
+        <div style="display: flex; gap: 8px;">
+          <button id="btnFit" class="btn-secondary" title="Ajuster à la taille">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            <span data-i18n="btnFit">Ajuster</span>
+          </button>
+          <button id="btnRotate" class="btn-secondary" title="Pivoter de 90°">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <span data-i18n="btnRotate">Pivoter</span>
+          </button>
+          <button id="btnReset" class="btn-secondary" title="Réinitialiser la position">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span data-i18n="btnZero">Zero</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Center: Interactive Workspace & Canvas Cropper -->
+    <div class="workspace-panel">
+      <div class="workspace-toolbar">
+        <span style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-acid)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+          <span data-i18n="cropHeader">Zone de rognage interactive (Glissez pour ajuster)</span>
+        </span>
+      </div>
+
+      <div id="canvasWrapper" class="canvas-wrapper">
+        <canvas id="cropCanvas"></canvas>
+      </div>
+
+      <div class="crop-hint" data-i18n="cropHint">
+        💡 Astuce : Déplacez à la souris et utilisez la molette pour zoomer en direct
+      </div>
+    </div>
+
+    <!-- Panel Right: Live Previews & Multi-Format Export -->
+    <div class="panel panel-right">
+      <div class="panel-title">
+        <span data-i18n="titleExport">Prévisualisation & Exporter</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+
+      <!-- Live Previews Grid -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="previewTitle">Aperçu Multi-Écrans</label>
+        <div class="preview-grid">
+          <!-- iOS Preview -->
+          <div class="preview-card">
+            <span class="preview-card-title">iOS App</span>
+            <img id="previewIos" class="mockup-ios" src="" alt="iOS preview">
+          </div>
+
+          <!-- macOS Preview -->
+          <div class="preview-card">
+            <span class="preview-card-title">macOS Dock</span>
+            <img id="previewMac" class="mockup-mac" src="" alt="macOS preview">
+          </div>
+
+          <!-- Android Preview -->
+          <div class="preview-card">
+            <span class="preview-card-title">Android</span>
+            <img id="previewAndroid" class="mockup-android" src="" alt="Android preview">
+          </div>
+
+          <!-- Web Tab Preview -->
+          <div class="preview-card">
+            <span class="preview-card-title">Web Favicon</span>
+            <div class="mockup-web">
+              <img id="previewWeb" class="mockup-favicon" src="" alt="Favicon preview">
+              <span>Plancton</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ZIP Export Format Checkboxes -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="zipFormatsTitle">Choix des Formats à exporter (Pack ZIP)</label>
+        <div class="export-options">
+          <label class="checkbox-item">
+            <input type="checkbox" id="chkIos" checked>
+            <div class="checkbox-label">
+              <span class="checkbox-title">🍏 iOS Bundle (Xcode AppIconset)</span>
+              <span class="checkbox-desc" data-i18n="iosDesc">Inclus Contents.json + 12 tailles (1024, 180, 120, 167, 87...)</span>
+            </div>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" id="chkAndroid" checked>
+            <div class="checkbox-label">
+              <span class="checkbox-title">🤖 Android Bundle (Mipmap & Play Store)</span>
+              <span class="checkbox-desc" data-i18n="androidDesc">Inclus res/mipmap (hdpi, xhdpi, xxhdpi...) + 512x512</span>
+            </div>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" id="chkWeb" checked>
+            <div class="checkbox-label">
+              <span class="checkbox-title">🌐 Web & PWA Bundle</span>
+              <span class="checkbox-desc" data-i18n="webDesc">Favicons 16/32, Apple-Touch-Icon, PWA 192/512, site.webmanifest</span>
+            </div>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" id="chkMac" checked>
+            <div class="checkbox-label">
+              <span class="checkbox-title">💻 macOS Iconset Bundle</span>
+              <span class="checkbox-desc" data-i18n="macDesc">Fichiers iconset de 16x16 jusqu'à 1024x1024</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Export Actions -->
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+        <button id="btnExportZip" class="btn-export-acid">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="btnZip">Télécharger le pack ZIP (Tous les formats)</span>
+        </button>
+
+        <button id="btnExportSingle" class="btn-secondary">
+          <span data-i18n="btnPng">Télécharger PNG haute résolution (1024x1024)</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

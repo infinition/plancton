@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/infinition/plancton"><img src="https://img.shields.io/github/stars/infinition/plancton?style=flat-square&color=ccff00" alt="GitHub Stars"></a>
+  <a href="https://www.buymeacoffee.com/infinition"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-infinition-yellow.svg?style=flat-square&logo=buy-me-a-coffee" alt="Buy Me A Coffee"></a>
   <a href="https://github.com/infinition/plancton/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
 </p>
 
@@ -45,6 +46,11 @@ Plancton is a client-side web application designed to prepare, crop, mask, and e
 - HTML5 Canvas & Vanilla JavaScript
 - Modern CSS (Custom Properties, Glassmorphism, Responsive Grid)
 - [JSZip](https://stuk.github.io/jszip/) for client-side ZIP archive generation
+
+## Funding
+
+If you find Plancton helpful, consider supporting the project:
+- [Buy Me a Coffee](https://www.buymeacoffee.com/infinition)
 
 ## License
 

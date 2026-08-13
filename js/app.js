@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // i18n Translations Dictionary
   const translations = {
     fr: {
+      btnCoffee: "Soutenir",
       loadSample: "Charger l'image modèle",
       titleImport: "Importation & Forme",
       dropLabel: "Déposer votre image",
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnPng: "Télécharger PNG haute résolution (1024x1024)"
     },
     en: {
+      btnCoffee: "Support",
       loadSample: "Load sample image",
       titleImport: "Import & Shape",
       dropLabel: "Drop your image",

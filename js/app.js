@@ -854,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Draw Text Layer with 360° Rotation & 360° Multi-Color Gradient
-  function drawTextOverlay(context) {
+  function drawTextOverlay(context, isExporting = false) {
     const textStr = textStringInput.value || '';
     if (!textStr.trim()) return;
 
@@ -908,14 +908,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     context.fillText(textStr, 0, 0);
 
-    // Draw Drag Outline & Bounding Box Indicator
-    context.strokeStyle = 'rgba(204, 255, 0, 0.4)';
-    context.lineWidth = 2;
-    context.setLineDash([6, 6]);
-    const metrics = context.measureText(textStr);
-    const bw = metrics.width + 24;
-    const bh = fontSize + 16;
-    context.strokeRect(-bw/2, -bh/2, bw, bh);
+    // ONLY draw dashed selection box when actively dragging or focusing controls, NEVER on export/previews
+    if (!isExporting && (isDraggingText || document.activeElement === textStringInput)) {
+      context.shadowColor = 'transparent';
+      context.strokeStyle = 'rgba(204, 255, 0, 0.5)';
+      context.lineWidth = 2;
+      context.setLineDash([6, 6]);
+      const metrics = context.measureText(textStr);
+      const bw = metrics.width + 24;
+      const bh = fontSize + 16;
+      context.strokeRect(-bw/2, -bh/2, bw, bh);
+    }
 
     context.restore();
   }
@@ -968,7 +971,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Master Render Engine with Layered Gloss & Clipped Background Fill
-  function render() {
+  function render(isExporting = false) {
     ctx.clearRect(0, 0, SIZE, SIZE);
 
     if (!isImageLoaded) return;
@@ -998,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Draw Text Layer
     if (chkText && chkText.checked) {
-      drawTextOverlay(ctx);
+      drawTextOverlay(ctx, isExporting);
     }
 
     // 5. Draw Badge / Ribbon Overlay
@@ -1018,7 +1021,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 7. Update Previews
-    updatePreviews();
+    if (!isExporting) {
+      updatePreviews();
+    }
   }
 
   function drawBadgeOverlay(context, size, bounds) {
@@ -1070,6 +1075,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updatePreviews() {
+    // Render clean frame without selection outlines for previews
+    const isExporting = true;
+    ctx.clearRect(0, 0, SIZE, SIZE);
+    if (!isImageLoaded) return;
+    const bounds = getShapeBounds(SIZE);
+    ctx.save();
+    applyShapeClip(ctx, currentShape, SIZE, bounds);
+    drawBackgroundFill(ctx);
+    const isGlossActive = chkGloss && chkGloss.checked;
+    const isGlossBehind = chkGlossBehind && chkGlossBehind.checked;
+    if (isGlossActive && isGlossBehind) {
+      drawGlossEffect(ctx);
+      drawUploadedImage(ctx);
+    } else {
+      drawUploadedImage(ctx);
+      if (isGlossActive) drawGlossEffect(ctx);
+    }
+    if (chkText && chkText.checked) drawTextOverlay(ctx, true);
+    if (chkBadge && chkBadge.checked) drawBadgeOverlay(ctx, SIZE, bounds);
+    ctx.restore();
+    if (chkBorder && chkBorder.checked && bounds.bWidth > 0) {
+      ctx.save();
+      ctx.lineWidth = bounds.bWidth;
+      ctx.strokeStyle = borderColorPicker.value;
+      strokeShape(ctx, currentShape, SIZE, bounds);
+      ctx.restore();
+    }
+
     const dataUrl = cropCanvas.toDataURL('image/png');
     if (previewIos) previewIos.src = dataUrl;
     if (previewMac) previewMac.src = dataUrl;
@@ -1091,8 +1124,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Single High-Res PNG Download
   btnExportSingle?.addEventListener('click', () => {
+    render(true);
     const dataUrl = cropCanvas.toDataURL('image/png');
     triggerDownload(dataUrl, 'plancton-icon-1024x1024.png');
+    render(false);
   });
 
   // Modal Code Snippets Controls
@@ -1150,6 +1185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnExportZip.disabled = true;
 
     const getResizedBlob = (targetWidth, targetHeight) => {
+      render(true);
       return new Promise((resolve) => {
         const offscreen = document.createElement('canvas');
         offscreen.width = targetWidth;

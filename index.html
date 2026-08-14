@@ -118,6 +118,102 @@
         </div>
       </details>
 
+      <!-- Accordion: Text & Typography Layer -->
+      <details class="accordion-item">
+        <summary class="accordion-header">
+          <span data-i18n="textTitle">✍️ Texte & Typographie</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-content">
+          <div class="fx-options">
+            <label class="fx-toggle">
+              <input type="checkbox" id="chkText">
+              <span data-i18n="chkText">Activer la couche texte</span>
+            </label>
+            <div id="textOptions" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px;">
+              <input type="text" id="textStringInput" value="PLANCTON" placeholder="Entrez votre texte" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 6px 10px; font-size: 12px; font-weight: 700;">
+
+              <!-- Font Selection & Custom Upload -->
+              <div style="display: flex; gap: 6px;">
+                <select id="fontFamilySelect" style="flex: 1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 6px; font-size: 11px;">
+                  <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
+                  <option value="'Inter', sans-serif">Inter</option>
+                  <option value="'Impact', sans-serif">Impact</option>
+                  <option value="'Outfit', sans-serif">Outfit</option>
+                  <option value="'Roboto', sans-serif">Roboto</option>
+                  <option value="'Georgia', serif">Georgia</option>
+                  <option value="'Courier New', monospace">Courier</option>
+                </select>
+
+                <label class="btn-secondary" style="width: auto; padding: 6px 8px; font-size: 11px; cursor: pointer;" title="Importer un fichier de police (.ttf, .otf, .woff)">
+                  📁 TTF
+                  <input type="file" id="fontFileInput" accept=".ttf,.otf,.woff,.woff2" style="display: none;">
+                </label>
+              </div>
+
+              <!-- Bold / Italic Toggles & Size Slider -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: flex; gap: 4px;">
+                  <button id="btnTextBold" class="shape-btn active" style="padding: 6px 12px; font-size: 12px; font-weight: 800;">B</button>
+                  <button id="btnTextItalic" class="shape-btn" style="padding: 6px 12px; font-size: 12px; font-style: italic;">I</button>
+                </div>
+                <div style="flex: 1;">
+                  <div class="control-label" style="margin-bottom: 2px;">
+                    <span style="font-size: 11px;" data-i18n="textSize">Taille</span>
+                    <span id="textSizeVal" class="control-label-value">64px</span>
+                  </div>
+                  <input type="range" id="textSizeRange" min="16" max="240" value="64">
+                </div>
+              </div>
+
+              <!-- Text Rotation 360 Slider -->
+              <div class="control-label">
+                <span style="font-size: 11px;" data-i18n="textRotation">Rotation Texte (360°)</span>
+                <span id="textRotationVal" class="control-label-value">0°</span>
+              </div>
+              <input type="range" id="textRotationRange" min="0" max="360" value="0">
+
+              <!-- Color Fill Mode: Solid vs Multi-Color 360 Gradient -->
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 11px; color: var(--text-muted);" data-i18n="textFillMode">Remplissage du texte</span>
+                  <select id="textFillTypeSelect" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; font-size: 11px;">
+                    <option value="solid">Couleur Unie</option>
+                    <option value="gradient">Dégradé 360° Multi-Couleurs</option>
+                  </select>
+                </div>
+
+                <div id="textSolidOptions" style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 11px; color: var(--text-muted);">Couleur</span>
+                  <input type="color" id="textColorPicker" value="#ccff00" style="width: 36px; height: 28px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+                </div>
+
+                <div id="textGradientOptions" style="display: none; flex-direction: column; gap: 6px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 11px; color: var(--text-muted);">Couleurs du Dégradé</span>
+                    <button id="btnAddTextGradColor" class="btn-secondary" style="width: auto; padding: 3px 8px; font-size: 10px;">+ Couleur</button>
+                  </div>
+                  <div id="textGradStopsContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <input type="color" class="text-grad-stop" value="#ccff00" style="width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+                    <input type="color" class="text-grad-stop" value="#00e5ff" style="width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+                  </div>
+
+                  <div class="control-label">
+                    <span style="font-size: 11px;" data-i18n="textGradAngle">Angle Dégradé (360°)</span>
+                    <span id="textGradAngleVal" class="control-label-value">90°</span>
+                  </div>
+                  <input type="range" id="textGradAngleRange" min="0" max="360" value="90">
+                </div>
+              </div>
+
+              <div style="font-size: 10px; color: var(--text-dim); margin-top: 4px;">
+                💡 Glissez le texte directement sur le canevas avec la souris pour le placer.
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
       <!-- Accordion: Badge / Ruban Overlay -->
       <details class="accordion-item">
         <summary class="accordion-header">
@@ -234,13 +330,40 @@
       <!-- Background Fill -->
       <div class="control-group">
         <label class="control-label" data-i18n="bgLabel">Remplissage de fond</label>
-        <div style="display: flex; gap: 10px;">
-          <select id="bgTypeSelect" style="flex:1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px; outline: none;">
-            <option value="transparent" data-i18n="bgTrans">Transparent</option>
-            <option value="color" data-i18n="bgColor">Couleur Unie</option>
-            <option value="blur" data-i18n="bgBlur">Flou de l'image</option>
-          </select>
-          <input type="color" id="bgColorPicker" value="#12141a" style="width: 40px; height: 38px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: var(--radius-sm); cursor: pointer;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 10px;">
+            <select id="bgTypeSelect" style="flex:1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px; outline: none;">
+              <option value="transparent" data-i18n="bgTrans">Transparent</option>
+              <option value="color" data-i18n="bgColor">Couleur Unie</option>
+              <option value="gradient" data-i18n="bgGrad">Dégradé 360° Multi-Couleurs</option>
+              <option value="blur" data-i18n="bgBlur">Flou de l'image</option>
+            </select>
+            <input type="color" id="bgColorPicker" value="#12141a" style="width: 40px; height: 38px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: var(--radius-sm); cursor: pointer;">
+          </div>
+
+          <div id="bgGradientSubpanel" style="display: none; flex-direction: column; gap: 8px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; color: var(--text-muted);">Couleurs du Dégradé</span>
+              <button id="btnAddBgGradColor" class="btn-secondary" style="width: auto; padding: 3px 8px; font-size: 10px;">+ Couleur</button>
+            </div>
+            <div id="bgGradStopsContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <input type="color" class="bg-grad-stop" value="#0a0b0e" style="width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+              <input type="color" class="bg-grad-stop" value="#1e293b" style="width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+              <input type="color" class="bg-grad-stop" value="#004466" style="width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;">
+            </div>
+
+            <div class="control-label">
+              <span style="font-size: 11px;" data-i18n="bgGradAngle">Orientation Angle (360°)</span>
+              <span id="bgGradAngleVal" class="control-label-value">135°</span>
+            </div>
+            <input type="range" id="bgGradAngleRange" min="0" max="360" value="135">
+
+            <div class="control-label">
+              <span style="font-size: 11px;" data-i18n="bgGradOpacity">Transparence / Opacité</span>
+              <span id="bgGradOpacityVal" class="control-label-value">100%</span>
+            </div>
+            <input type="range" id="bgGradOpacityRange" min="0" max="100" value="100">
+          </div>
         </div>
       </div>
 

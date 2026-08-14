@@ -1,4 +1,4 @@
-// Plancton App Icon Studio - Complete Feature Engine with 360° Gloss Reflet, Background Remover & FX
+// Plancton App Icon Studio - Complete Feature Engine with 360° Multi-Color Background & Text Gradients, 360° Text Rotation & Custom Font Importer
 
 document.addEventListener('DOMContentLoaded', () => {
   const cropCanvas = document.getElementById('cropCanvas');
@@ -13,11 +13,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const zoomValue = document.getElementById('zoomValue');
   const bgTypeSelect = document.getElementById('bgTypeSelect');
   const bgColorPicker = document.getElementById('bgColorPicker');
+  const bgGradientSubpanel = document.getElementById('bgGradientSubpanel');
+  const btnAddBgGradColor = document.getElementById('btnAddBgGradColor');
+  const bgGradStopsContainer = document.getElementById('bgGradStopsContainer');
+  const bgGradAngleRange = document.getElementById('bgGradAngleRange');
+  const bgGradAngleVal = document.getElementById('bgGradAngleVal');
+  const bgGradOpacityRange = document.getElementById('bgGradOpacityRange');
+  const bgGradOpacityVal = document.getElementById('bgGradOpacityVal');
+
   const btnRotate = document.getElementById('btnRotate');
   const btnReset = document.getElementById('btnReset');
   const btnFit = document.getElementById('btnFit');
   const btnExportZip = document.getElementById('btnExportZip');
   const btnExportSingle = document.getElementById('btnExportSingle');
+
+  // Text Layer Controls
+  const chkText = document.getElementById('chkText');
+  const textOptions = document.getElementById('textOptions');
+  const textStringInput = document.getElementById('textStringInput');
+  const fontFamilySelect = document.getElementById('fontFamilySelect');
+  const fontFileInput = document.getElementById('fontFileInput');
+  const btnTextBold = document.getElementById('btnTextBold');
+  const btnTextItalic = document.getElementById('btnTextItalic');
+  const textSizeRange = document.getElementById('textSizeRange');
+  const textSizeVal = document.getElementById('textSizeVal');
+  const textRotationRange = document.getElementById('textRotationRange');
+  const textRotationVal = document.getElementById('textRotationVal');
+  const textFillTypeSelect = document.getElementById('textFillTypeSelect');
+  const textSolidOptions = document.getElementById('textSolidOptions');
+  const textColorPicker = document.getElementById('textColorPicker');
+  const textGradientOptions = document.getElementById('textGradientOptions');
+  const btnAddTextGradColor = document.getElementById('btnAddTextGradColor');
+  const textGradStopsContainer = document.getElementById('textGradStopsContainer');
+  const textGradAngleRange = document.getElementById('textGradAngleRange');
+  const textGradAngleVal = document.getElementById('textGradAngleVal');
 
   // Gloss Controls
   const chkGloss = document.getElementById('chkGloss');
@@ -74,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewWeb = document.getElementById('previewWeb');
 
   // iOS Squircle SVG Path String
-  const iosSquircleD = "M1093.4,698.4c0-3.6,0-7.2,0-10.7c0-3-0.1-6-0.1-9.1c-0.2-6.6-0.6-13.2-1.7-19.7c-1.2-6.6-3.1-12.7-6.2-18.7c-3-5.9-6.9-11.3-11.6-16c-4.7-4.7-10.1-8.6-16-11.6c-6-3.1-12.1-5-18.7-6.2c-6.5-1.2-13.1-1.6-19.7-1.7c-3-0.1-6-0.1-9.1-0.1c-3.6,0-7.2,0-10.7,0H887.3c-3.6,0-7.2,0-10.7,0c-3,0-6,0.1-9.1,0.1c-6.6,0.2-13.2,0.6-19.7,1.7c-6.6,1.2-12.7,3.1-18.7,6.2c-5.9,3-11.3,6.9-16,11.6c-4.7,4.7-8.6,10.1-11.6,16c-3.1,6-5,12.1-6.2,18.7c-1.2,6.5-1.6,13.1-1.7,19.7c-0.1,3-0.1,6-0.1,9.1c0,3.6,0,7.2,0,10.7v112.3c0,3.6,0,7.2,0,10.7c0,3,0.1,6,0.1,9.1c0.2,6.6,0.6,13.2,1.7,19.7c1.2,6.6,3.1,12.7,6.2,18.7c3,5.9,6.9,11.3,11.6,16c4.7,4.7,10.1,8.6,16,11.6c6,3.1,12.1,5,18.7,6.2c6.5,1.2,13.1,1.6,19.7,1.7c3,0.1,6,0.1,9.1,0.1c3.6,0,7.2,0,10.7,0h112.3c3.6,0,7.2,0,10.7,0c3,0,6-0.1,9.1-0.1c6.6-0.2,13.2-0.6,19.7-1.7c6.6-1.2,12.7-3.1,18.7-6.2c5.9-3,11.3-6.9,16-11.6s8.6-10.1,11.6-16c3.1-6,5-12.1,6.2-18.7c1.2-6.5,1.6-13.1,1.7-19.7c0.1-3,0.1,6-0.1,9.1c0-3.6,0-7.2,0-10.7V698.4z";
+  const iosSquircleD = "M1093.4,698.4c0-3.6,0-7.2,0-10.7c0-3-0.1-6-0.1-9.1c-0.2-6.6-0.6-13.2-1.7-19.7c-1.2-6.6-3.1-12.7-6.2-18.7c-3-5.9-6.9-11.3-11.6-16c-4.7-4.7-10.1-8.6-16-11.6c-6-3.1-12.1-5-18.7-6.2c-6.5-1.2-13.1-1.6-19.7-1.7c-3-0.1-6-0.1-9.1-0.1c-3.6,0-7.2,0-10.7,0H887.3c-3.6,0-7.2,0-10.7,0c-3,0-6,0.1-9.1,0.1c-6.6,0.2-13.2,0.6-19.7,1.7c-6.6,1.2-12.7,3.1-18.7,6.2c-5.9,3-11.3,6.9-16,11.6c-4.7,4.7-8.6,10.1-11.6,16c-3.1,6-5,12.1-6.2,18.7c-1.2,6.5-1.6,13.1-1.7,19.7c-0.1,3-0.1,6-0.1,9.1c0,3.6,0,7.2,0,10.7v112.3c0,3.6,0,7.2,0,10.7c0,3,0.1,6,0.1,9.1c0.2,6.6,0.6,13.2,1.7,19.7c1.2,6.6,3.1,12.7,6.2,18.7c3,5.9,6.9,11.3,11.6,16c4.7,4.7,10.1-8.6,16-11.6c6,3.1,12.1,5,18.7,6.2c6.5,1.2,13.1,1.6,19.7,1.7c3,0.1,6,0.1,9.1,0.1c3.6,0,7.2,0,10.7,0h112.3c3.6,0,7.2,0,10.7,0c3,0,6-0.1,9.1-0.1c6.6-0.2,13.2-0.6,19.7-1.7c6.6-1.2,12.7-3.1,18.7-6.2c5.9-3,11.3-6.9,16-11.6s8.6-10.1,11.6-16c3.1-6,5-12.1,6.2-18.7c1.2-6.5,1.6-13.1,1.7-19.7c0.1-3,0.1,6-0.1,9.1c0-3.6,0-7.2,0-10.7V698.4z";
 
   // i18n Translations Dictionary
   const translations = {
@@ -89,6 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
       shapeCircle: "Cercle",
       shapeRounded: "Arrondi",
       shapeSquare: "Carré Plein",
+      textTitle: "✍️ Texte & Typographie",
+      chkText: "Activer la couche texte",
+      textSize: "Taille",
+      textRotation: "Rotation Texte (360°)",
+      textFillMode: "Remplissage du texte",
+      textGradAngle: "Angle Dégradé (360°)",
       removeBgTitle: "🧪 Supprimer la couleur de fond",
       chkRemoveBg: "Activer le détourage par couleur",
       keyColor: "Couleur à retirer",
@@ -109,6 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
       bgLabel: "Remplissage de fond",
       bgTrans: "Transparent",
       bgColor: "Couleur Unie",
+      bgGrad: "Dégradé 360° Multi-Couleurs",
+      bgGradAngle: "Orientation Angle (360°)",
+      bgGradOpacity: "Transparence / Opacité",
       bgBlur: "Flou de l'image",
       toolsLabel: "Ajustements",
       btnFit: "Ajuster",
@@ -139,6 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
       shapeCircle: "Circle",
       shapeRounded: "Rounded",
       shapeSquare: "Square Fill",
+      textTitle: "✍️ Text & Typography",
+      chkText: "Enable text overlay",
+      textSize: "Size",
+      textRotation: "Text Rotation (360°)",
+      textFillMode: "Text Fill Mode",
+      textGradAngle: "Gradient Angle (360°)",
       removeBgTitle: "🧪 Remove Background Color",
       chkRemoveBg: "Enable color keying removal",
       keyColor: "Key color to remove",
@@ -159,6 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
       bgLabel: "Background Fill",
       bgTrans: "Transparent",
       bgColor: "Solid Color",
+      bgGrad: "Multi-Color 360° Gradient",
+      bgGradAngle: "Reflection Angle (360°)",
+      bgGradOpacity: "Transparency / Opacity",
       bgBlur: "Image Blur",
       toolsLabel: "Adjustments",
       btnFit: "Fit",
@@ -204,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyLanguage(currentLang === 'fr' ? 'en' : 'fr');
   });
 
-  // State Variables
+  // Master State Variables
   let loadedImage = new Image();
   let processedImageCanvas = document.createElement('canvas');
   let isImageLoaded = false;
@@ -213,14 +260,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let panY = 0;
   let rotation = 0;
   let currentShape = 'ios';
-  let isDragging = false;
+
+  // Text State Variables
+  const SIZE = 1024;
+  let textX = SIZE / 2;
+  let textY = SIZE * 0.72;
+  let isBold = true;
+  let isItalic = false;
+  let isDraggingText = false;
+  let textDragOffsetX = 0;
+  let textDragOffsetY = 0;
+
+  // Image Drag State
+  let isDraggingImage = false;
   let dragStartX = 0;
   let dragStartY = 0;
   
   let initialPinchDistance = null;
   let initialPinchZoom = 1.0;
 
-  const SIZE = 1024;
   cropCanvas.width = SIZE;
   cropCanvas.height = SIZE;
 
@@ -269,6 +327,122 @@ document.addEventListener('DOMContentLoaded', () => {
       pCtx.putImageData(imgData, 0, 0);
     }
   }
+
+  // Background Gradient Controls
+  bgTypeSelect?.addEventListener('change', () => {
+    const val = bgTypeSelect.value;
+    bgColorPicker.style.display = (val === 'color') ? 'inline-block' : 'none';
+    bgGradientSubpanel.style.display = (val === 'gradient') ? 'flex' : 'none';
+    render();
+  });
+
+  bgGradAngleRange?.addEventListener('input', (e) => {
+    bgGradAngleVal.textContent = e.target.value + '°';
+    render();
+  });
+  bgGradOpacityRange?.addEventListener('input', (e) => {
+    bgGradOpacityVal.textContent = e.target.value + '%';
+    render();
+  });
+
+  btnAddBgGradColor?.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.className = 'bg-grad-stop';
+    input.value = '#ff007f';
+    input.style.cssText = 'width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;';
+    input.addEventListener('input', render);
+    bgGradStopsContainer.appendChild(input);
+    render();
+  });
+
+  document.querySelectorAll('.bg-grad-stop').forEach(input => {
+    input.addEventListener('input', render);
+  });
+
+  // Text Layer Controls & Event Listeners
+  chkText?.addEventListener('change', () => {
+    textOptions.style.display = chkText.checked ? 'flex' : 'none';
+    render();
+  });
+  textStringInput?.addEventListener('input', render);
+  fontFamilySelect?.addEventListener('change', render);
+
+  btnTextBold?.addEventListener('click', () => {
+    isBold = !isBold;
+    btnTextBold.classList.toggle('active', isBold);
+    render();
+  });
+  btnTextItalic?.addEventListener('click', () => {
+    isItalic = !isItalic;
+    btnTextItalic.classList.toggle('active', isItalic);
+    render();
+  });
+
+  textSizeRange?.addEventListener('input', (e) => {
+    textSizeVal.textContent = e.target.value + 'px';
+    render();
+  });
+
+  textRotationRange?.addEventListener('input', (e) => {
+    textRotationVal.textContent = e.target.value + '°';
+    render();
+  });
+
+  textFillTypeSelect?.addEventListener('change', () => {
+    const isGrad = textFillTypeSelect.value === 'gradient';
+    textSolidOptions.style.display = isGrad ? 'none' : 'flex';
+    textGradientOptions.style.display = isGrad ? 'flex' : 'none';
+    render();
+  });
+
+  textColorPicker?.addEventListener('input', render);
+
+  btnAddTextGradColor?.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.className = 'text-grad-stop';
+    input.value = '#ff007f';
+    input.style.cssText = 'width: 32px; height: 26px; border: 1px solid var(--border-color); background: var(--bg-input); border-radius: 4px; cursor: pointer;';
+    input.addEventListener('input', render);
+    textGradStopsContainer.appendChild(input);
+    render();
+  });
+
+  document.querySelectorAll('.text-grad-stop').forEach(input => {
+    input.addEventListener('input', render);
+  });
+
+  textGradAngleRange?.addEventListener('input', (e) => {
+    textGradAngleVal.textContent = e.target.value + '°';
+    render();
+  });
+
+  // Custom Font File Importer (.ttf, .otf, .woff)
+  fontFileInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fontName = 'CustomFont_' + Date.now();
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const fontFace = new FontFace(fontName, evt.target.result);
+      fontFace.load().then((loadedFace) => {
+        document.fonts.add(loadedFace);
+        
+        const option = document.createElement('option');
+        option.value = `'${fontName}', sans-serif`;
+        option.textContent = `⭐ ${file.name.replace(/\.[^/.]+$/, "")}`;
+        fontFamilySelect.appendChild(option);
+        fontFamilySelect.value = option.value;
+        render();
+      }).catch(err => {
+        alert("Erreur lors du chargement du fichier de police.");
+        console.error("Font loading error:", err);
+      });
+    };
+    reader.readAsArrayBuffer(file);
+  });
 
   // Gloss Reflet Controls & Event Listeners
   chkGloss?.addEventListener('change', () => {
@@ -378,25 +552,58 @@ document.addEventListener('DOMContentLoaded', () => {
     return SIZE / (rect.width || 360);
   }
 
-  // Mouse Drag Events
+  function getCanvasCoords(clientX, clientY) {
+    const rect = canvasWrapper.getBoundingClientRect();
+    const factor = SIZE / rect.width;
+    return {
+      x: (clientX - rect.left) * factor,
+      y: (clientY - rect.top) * factor
+    };
+  }
+
+  function isPointerOverText(ptX, ptY) {
+    if (!chkText || !chkText.checked) return false;
+    const fontPx = parseFloat(textSizeRange.value);
+    const dist = Math.hypot(ptX - textX, ptY - textY);
+    return dist < fontPx * 1.5;
+  }
+
+  // Drag Events (Mouse)
   canvasWrapper.addEventListener('mousedown', (e) => {
     if (!isImageLoaded) return;
-    isDragging = true;
-    const factor = getCanvasScaleFactor();
-    dragStartX = e.clientX * factor - panX;
-    dragStartY = e.clientY * factor - panY;
+    const coords = getCanvasCoords(e.clientX, e.clientY);
+
+    if (isPointerOverText(coords.x, coords.y)) {
+      isDraggingText = true;
+      textDragOffsetX = coords.x - textX;
+      textDragOffsetY = coords.y - textY;
+      canvasWrapper.style.cursor = 'move';
+    } else {
+      isDraggingImage = true;
+      const factor = getCanvasScaleFactor();
+      dragStartX = e.clientX * factor - panX;
+      dragStartY = e.clientY * factor - panY;
+    }
   });
 
   window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    const factor = getCanvasScaleFactor();
-    panX = e.clientX * factor - dragStartX;
-    panY = e.clientY * factor - dragStartY;
-    render();
+    if (isDraggingText) {
+      const coords = getCanvasCoords(e.clientX, e.clientY);
+      textX = coords.x - textDragOffsetX;
+      textY = coords.y - textDragOffsetY;
+      render();
+    } else if (isDraggingImage) {
+      const factor = getCanvasScaleFactor();
+      panX = e.clientX * factor - dragStartX;
+      panY = e.clientY * factor - dragStartY;
+      render();
+    }
   });
 
   window.addEventListener('mouseup', () => {
-    isDragging = false;
+    isDraggingText = false;
+    isDraggingImage = false;
+    canvasWrapper.style.cursor = 'grab';
   });
 
   canvasWrapper.addEventListener('wheel', (e) => {
@@ -406,17 +613,25 @@ document.addEventListener('DOMContentLoaded', () => {
     updateZoom(zoom + delta);
   }, { passive: false });
 
-  // Touch Drag & Pinch-to-Zoom
+  // Touch Drag Events
   canvasWrapper.addEventListener('touchstart', (e) => {
     if (!isImageLoaded) return;
     const factor = getCanvasScaleFactor();
     
     if (e.touches.length === 1) {
-      isDragging = true;
-      dragStartX = e.touches[0].clientX * factor - panX;
-      dragStartY = e.touches[0].clientY * factor - panY;
+      const coords = getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+      if (isPointerOverText(coords.x, coords.y)) {
+        isDraggingText = true;
+        textDragOffsetX = coords.x - textX;
+        textDragOffsetY = coords.y - textY;
+      } else {
+        isDraggingImage = true;
+        dragStartX = e.touches[0].clientX * factor - panX;
+        dragStartY = e.touches[0].clientY * factor - panY;
+      }
     } else if (e.touches.length === 2) {
-      isDragging = false;
+      isDraggingImage = false;
+      isDraggingText = false;
       initialPinchDistance = getTouchDistance(e.touches);
       initialPinchZoom = zoom;
     }
@@ -426,10 +641,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isImageLoaded) return;
     const factor = getCanvasScaleFactor();
 
-    if (e.touches.length === 1 && isDragging) {
-      panX = e.touches[0].clientX * factor - dragStartX;
-      panY = e.touches[0].clientY * factor - dragStartY;
-      render();
+    if (e.touches.length === 1) {
+      const coords = getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+      if (isDraggingText) {
+        textX = coords.x - textDragOffsetX;
+        textY = coords.y - textDragOffsetY;
+        render();
+      } else if (isDraggingImage) {
+        panX = e.touches[0].clientX * factor - dragStartX;
+        panY = e.touches[0].clientY * factor - dragStartY;
+        render();
+      }
     } else if (e.touches.length === 2 && initialPinchDistance) {
       e.preventDefault();
       const currentDist = getTouchDistance(e.touches);
@@ -440,13 +662,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   canvasWrapper.addEventListener('touchend', (e) => {
     if (e.touches.length === 0) {
-      isDragging = false;
-      initialPinchDistance = null;
-    } else if (e.touches.length === 1) {
-      const factor = getCanvasScaleFactor();
-      isDragging = true;
-      dragStartX = e.touches[0].clientX * factor - panX;
-      dragStartY = e.touches[0].clientY * factor - panY;
+      isDraggingImage = false;
+      isDraggingText = false;
       initialPinchDistance = null;
     }
   });
@@ -468,7 +685,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateZoom(parseFloat(e.target.value));
   });
 
-  bgTypeSelect.addEventListener('change', render);
   bgColorPicker.addEventListener('input', render);
 
   btnRotate.addEventListener('click', () => {
@@ -500,6 +716,8 @@ document.addEventListener('DOMContentLoaded', () => {
     panX = 0;
     panY = 0;
     rotation = 0;
+    textX = SIZE / 2;
+    textY = SIZE * 0.72;
     fitToFrame();
   }
 
@@ -521,7 +739,67 @@ document.addEventListener('DOMContentLoaded', () => {
     return { bWidth, inset, innerSize };
   }
 
-  // Draw 360° Rotatable Gloss Sheen FX with Custom Color & Opacity
+  // Authentic Smooth iOS Squircle Path Generator
+  function drawSquirclePath(ctx, x, y, width, height) {
+    const r = width * 0.225;
+    const right = x + width;
+    const bottom = y + height;
+    const smooth = r * 1.52;
+
+    ctx.beginPath();
+    ctx.moveTo(x + smooth, y);
+    ctx.lineTo(right - smooth, y);
+    ctx.bezierCurveTo(right - r * 0.55, y, right, y + r * 0.55, right, y + smooth);
+    ctx.lineTo(right, bottom - smooth);
+    ctx.bezierCurveTo(right, bottom - r * 0.55, right - r * 0.55, bottom, right - smooth, bottom);
+    ctx.lineTo(x + smooth, bottom);
+    ctx.bezierCurveTo(x + r * 0.55, bottom, x, bottom - r * 0.55, x, bottom - smooth);
+    ctx.lineTo(x, y + smooth);
+    ctx.bezierCurveTo(x, y + r * 0.55, x + r * 0.55, y, x + smooth, y);
+    ctx.closePath();
+  }
+
+  function applyShapeClip(context, shape, size, bounds) {
+    const { inset, innerSize } = bounds;
+    if (shape === 'ios') {
+      drawSquirclePath(context, inset, inset, innerSize, innerSize);
+    } else if (shape === 'circle') {
+      context.beginPath();
+      context.arc(size / 2, size / 2, innerSize / 2, 0, Math.PI * 2);
+    } else if (shape === 'rounded') {
+      context.beginPath();
+      roundedRect(context, inset, inset, innerSize, innerSize, innerSize * 0.15);
+    } else if (shape === 'macos') {
+      context.beginPath();
+      roundedRect(context, inset + innerSize * 0.05, inset + innerSize * 0.05, innerSize * 0.9, innerSize * 0.9, innerSize * 0.2);
+    } else if (shape === 'square') {
+      context.beginPath();
+      context.rect(inset, inset, innerSize, innerSize);
+    }
+    context.clip();
+  }
+
+  function strokeShape(context, shape, size, bounds) {
+    const { inset, innerSize } = bounds;
+    if (shape === 'ios') {
+      drawSquirclePath(context, inset, inset, innerSize, innerSize);
+    } else if (shape === 'circle') {
+      context.beginPath();
+      context.arc(size / 2, size / 2, innerSize / 2, 0, Math.PI * 2);
+    } else if (shape === 'rounded') {
+      context.beginPath();
+      roundedRect(context, inset, inset, innerSize, innerSize, innerSize * 0.15);
+    } else if (shape === 'macos') {
+      context.beginPath();
+      roundedRect(context, inset + innerSize * 0.05, inset + innerSize * 0.05, innerSize * 0.9, innerSize * 0.9, innerSize * 0.2);
+    } else if (shape === 'square') {
+      context.beginPath();
+      context.rect(inset, inset, innerSize, innerSize);
+    }
+    context.stroke();
+  }
+
+  // Draw 360° Rotatable Gloss Sheen FX
   function drawGlossEffect(context) {
     const angleDeg = parseFloat(glossAngleRange.value || 0);
     const opacity = parseFloat(glossOpacityRange.value || 40) / 100.0;
@@ -575,54 +853,162 @@ document.addEventListener('DOMContentLoaded', () => {
     context.restore();
   }
 
-  // Master Render Engine with Layered Gloss Support
+  // Draw Text Layer with 360° Rotation & 360° Multi-Color Gradient
+  function drawTextOverlay(context) {
+    const textStr = textStringInput.value || '';
+    if (!textStr.trim()) return;
+
+    const fontSize = parseFloat(textSizeRange.value || 64);
+    const fontFamily = fontFamilySelect.value;
+    const weightStr = isBold ? 'bold ' : '';
+    const styleStr = isItalic ? 'italic ' : '';
+    const textRot = parseFloat(textRotationRange.value || 0);
+
+    context.save();
+
+    // 360 Text Rotation
+    context.translate(textX, textY);
+    context.rotate((textRot * Math.PI) / 180.0);
+
+    context.font = `${styleStr}${weightStr}${fontSize}px ${fontFamily}`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+
+    const fillType = textFillTypeSelect.value;
+    if (fillType === 'solid') {
+      context.fillStyle = textColorPicker.value;
+    } else {
+      const metrics = context.measureText(textStr);
+      const w = metrics.width || fontSize * textStr.length * 0.6;
+      const h = fontSize;
+
+      const angleDeg = parseFloat(textGradAngleRange.value || 90);
+      const rad = (angleDeg * Math.PI) / 180.0;
+      
+      const x1 = - (w / 2) * Math.cos(rad);
+      const y1 = - (h / 2) * Math.sin(rad);
+      const x2 = (w / 2) * Math.cos(rad);
+      const y2 = (h / 2) * Math.sin(rad);
+
+      const textGrad = context.createLinearGradient(x1, y1, x2, y2);
+      const stops = document.querySelectorAll('.text-grad-stop');
+      const stopCount = stops.length || 1;
+
+      stops.forEach((input, index) => {
+        const offset = stopCount > 1 ? index / (stopCount - 1) : 0;
+        textGrad.addColorStop(offset, input.value);
+      });
+
+      context.fillStyle = textGrad;
+    }
+
+    context.shadowColor = 'rgba(0,0,0,0.5)';
+    context.shadowBlur = 10;
+    context.shadowOffsetY = 4;
+
+    context.fillText(textStr, 0, 0);
+
+    // Draw Drag Outline & Bounding Box Indicator
+    context.strokeStyle = 'rgba(204, 255, 0, 0.4)';
+    context.lineWidth = 2;
+    context.setLineDash([6, 6]);
+    const metrics = context.measureText(textStr);
+    const bw = metrics.width + 24;
+    const bh = fontSize + 16;
+    context.strokeRect(-bw/2, -bh/2, bw, bh);
+
+    context.restore();
+  }
+
+  // Draw 360° Multi-Color Background Gradient
+  function drawBackgroundFill(context) {
+    const bgType = bgTypeSelect.value;
+
+    if (bgType === 'color') {
+      context.fillStyle = bgColorPicker.value;
+      context.fillRect(0, 0, SIZE, SIZE);
+    } else if (bgType === 'gradient') {
+      const angleDeg = parseFloat(bgGradAngleRange.value || 135);
+      const opacity = parseFloat(bgGradOpacityRange.value || 100) / 100.0;
+      const rad = (angleDeg * Math.PI) / 180.0;
+
+      const cx = SIZE / 2;
+      const cy = SIZE / 2;
+      const len = SIZE / 2;
+
+      const x1 = cx - len * Math.cos(rad);
+      const y1 = cy - len * Math.sin(rad);
+      const x2 = cx + len * Math.cos(rad);
+      const y2 = cy + len * Math.sin(rad);
+
+      const bgGrad = context.createLinearGradient(x1, y1, x2, y2);
+      const stops = document.querySelectorAll('.bg-grad-stop');
+      const stopCount = stops.length || 1;
+
+      stops.forEach((input, index) => {
+        const offset = stopCount > 1 ? index / (stopCount - 1) : 0;
+        const hex = input.value;
+        const r = parseInt(hex.substr(1, 2), 16);
+        const g = parseInt(hex.substr(3, 2), 16);
+        const b = parseInt(hex.substr(5, 2), 16);
+        bgGrad.addColorStop(offset, `rgba(${r}, ${g}, ${b}, ${opacity})`);
+      });
+
+      context.save();
+      context.fillStyle = bgGrad;
+      context.fillRect(0, 0, SIZE, SIZE);
+      context.restore();
+
+    } else if (bgType === 'blur') {
+      context.save();
+      context.filter = 'blur(40px)';
+      context.drawImage(processedImageCanvas, -SIZE/2, -SIZE/2, SIZE*2, SIZE*2);
+      context.restore();
+    }
+  }
+
+  // Master Render Engine with Layered Gloss & Clipped Background Fill
   function render() {
     ctx.clearRect(0, 0, SIZE, SIZE);
-
-    // 1. Draw Background Fill
-    const bgType = bgTypeSelect.value;
-    if (bgType === 'color') {
-      ctx.fillStyle = bgColorPicker.value;
-      ctx.fillRect(0, 0, SIZE, SIZE);
-    } else if (bgType === 'blur' && isImageLoaded) {
-      ctx.save();
-      ctx.filter = 'blur(40px)';
-      ctx.drawImage(processedImageCanvas, -SIZE/2, -SIZE/2, SIZE*2, SIZE*2);
-      ctx.restore();
-    }
 
     if (!isImageLoaded) return;
 
     const bounds = getShapeBounds(SIZE);
 
-    // 2. Apply Shape Clip
+    // 1. Apply Shape Clip FIRST so all background fills & images stay strictly inside icon shape
     ctx.save();
     applyShapeClip(ctx, currentShape, SIZE, bounds);
+
+    // 2. Draw Background Fill inside clipped icon shape
+    drawBackgroundFill(ctx);
 
     const isGlossActive = chkGloss && chkGloss.checked;
     const isGlossBehind = chkGlossBehind && chkGlossBehind.checked;
 
     // 3. Draw Layers (Order depends on chkGlossBehind)
     if (isGlossActive && isGlossBehind) {
-      // Gloss on background ONLY (Behind image)
       drawGlossEffect(ctx);
       drawUploadedImage(ctx);
     } else {
-      // Default: Image first, Gloss on top
       drawUploadedImage(ctx);
       if (isGlossActive) {
         drawGlossEffect(ctx);
       }
     }
 
-    // 4. Draw Badge / Ribbon Overlay
+    // 4. Draw Text Layer
+    if (chkText && chkText.checked) {
+      drawTextOverlay(ctx);
+    }
+
+    // 5. Draw Badge / Ribbon Overlay
     if (chkBadge && chkBadge.checked) {
       drawBadgeOverlay(ctx, SIZE, bounds);
     }
 
     ctx.restore();
 
-    // 5. Draw Border FX
+    // 6. Draw Border FX on outer path
     if (chkBorder && chkBorder.checked && bounds.bWidth > 0) {
       ctx.save();
       ctx.lineWidth = bounds.bWidth;
@@ -631,7 +1017,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.restore();
     }
 
-    // 6. Update Previews
+    // 7. Update Previews
     updatePreviews();
   }
 
@@ -669,60 +1055,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     context.restore();
-  }
-
-  function applyShapeClip(context, shape, size, bounds) {
-    const { inset, innerSize } = bounds;
-    context.beginPath();
-    if (shape === 'ios') {
-      if (window.Path2D) {
-        const path = new Path2D(iosSquircleD);
-        context.save();
-        context.translate(inset, inset);
-        context.scale(innerSize / 300.0, innerSize / 300.0);
-        context.translate(-793.4, -604.5);
-        context.clip(path);
-        context.restore();
-        return;
-      }
-      roundedRect(context, inset, inset, innerSize, innerSize, innerSize * 0.22);
-    } else if (shape === 'circle') {
-      context.arc(size / 2, size / 2, innerSize / 2, 0, Math.PI * 2);
-    } else if (shape === 'rounded') {
-      roundedRect(context, inset, inset, innerSize, innerSize, innerSize * 0.15);
-    } else if (shape === 'macos') {
-      roundedRect(context, inset + innerSize * 0.05, inset + innerSize * 0.05, innerSize * 0.9, innerSize * 0.9, innerSize * 0.2);
-    } else if (shape === 'square') {
-      context.rect(inset, inset, innerSize, innerSize);
-    }
-    context.clip();
-  }
-
-  function strokeShape(context, shape, size, bounds) {
-    const { inset, innerSize } = bounds;
-    context.beginPath();
-    if (shape === 'ios') {
-      if (window.Path2D) {
-        const path = new Path2D(iosSquircleD);
-        context.save();
-        context.translate(inset, inset);
-        context.scale(innerSize / 300.0, innerSize / 300.0);
-        context.translate(-793.4, -604.5);
-        context.stroke(path);
-        context.restore();
-        return;
-      }
-      roundedRect(context, inset, inset, innerSize, innerSize, innerSize * 0.22);
-    } else if (shape === 'circle') {
-      context.arc(size / 2, size / 2, innerSize / 2, 0, Math.PI * 2);
-    } else if (shape === 'rounded') {
-      roundedRect(context, inset, inset, innerSize, innerSize, innerSize * 0.15);
-    } else if (shape === 'macos') {
-      roundedRect(context, inset + innerSize * 0.05, inset + innerSize * 0.05, innerSize * 0.9, innerSize * 0.9, innerSize * 0.2);
-    } else if (shape === 'square') {
-      context.rect(inset, inset, innerSize, innerSize);
-    }
-    context.stroke();
   }
 
   function roundedRect(ctx, x, y, width, height, radius) {
